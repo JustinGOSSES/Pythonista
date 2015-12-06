@@ -1,0 +1,68 @@
+import location
+ 
+
+#intro
+print "this is a simple program that brings up iOS location data"
+print " "
+
+# starts location task on phone
+location.start_updates()
+
+# gets location data , not address
+coordinates = location.get_location()
+# stops phone from finding location
+location.stop_updates()
+
+#prints coordinates
+#print "coordinates are", coordinates
+
+#finds address from coordinates
+address = location.reverse_geocode(coordinates)
+
+# names variables for compass directions
+coord = coordinates['course']
+compass = 'bob'
+
+def direction(coord):
+	global compass
+	if coord >= 0 and coord < 90:
+		compass = 'NE'
+	elif coord >= 90 and coord< 180:
+		compass = 'SE'
+	elif coord >= 180 and coord < 270:
+		compass = 'SW'
+	elif coord >= 270 and coord <= 360:
+		compass = 'NW'
+	elif coord == -1:
+		compass = 'no update'
+	else: 
+		'notta'
+	
+# runs function for turning 0-360 into
+# compass strings NE SE etc.
+direction(coord) 
+ 
+# slightly different address lookup that includes the [0] at the end which is critical for some reason?
+addressA = location.reverse_geocode(coordinates)[0]
+
+# calls the vertical accuracy key from coordinates dictionary to find altitufe error
+vert_error = coordinates['vertical_accuracy']
+
+#calls the horizontal accuracy key from coordinates
+horiz_error = coordinates['horizontal_accuracy']
+
+
+print "-----------------------------"
+print "nearest address is", addressA['Street']+",", addressA['City'], addressA['State'], addressA['ZIP']
+print 'neighborhood is',addressA['SubLocality']
+print ''
+print 'longitute is:',coordinates['longitude']
+print 'latitude is:', coordinates['latitude']
+print 'horizontal accuracy','+-',horiz_error,'meters'
+print "altitude is about", round(coordinates['altitude']),'+-',vert_error,"meters"
+print  ' '
+
+print "course in 0-360* is :",coordinates['course']
+print "direction is ",compass
+print "speed is ", coordinates['speed']
+print ' '
